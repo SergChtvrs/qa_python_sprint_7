@@ -21,13 +21,23 @@ def generate_new_courier():
 
 
 def register_new_courier_and_return_login_password():
+    new_courier = generate_new_courier()
     login_pass = {}
-    payload = generate_new_courier()
-    response = requests.post(Endpoints.URL + Endpoints.COURIER_ENDPOINT, data=payload)
+    response = requests.post(Endpoints.URL + Endpoints.COURIER_ENDPOINT, data=new_courier)
     if response.status_code == 201:
-        del payload['firstName']
-        login_pass = payload
+        login_pass['login'] = new_courier.get('login')
+        login_pass['password'] = new_courier.get('password')
     return login_pass
+
+
+# def register_new_courier_and_return_login_password():
+#     login_pass = {}
+#     payload = generate_new_courier()
+#     response = requests.post(Endpoints.URL + Endpoints.COURIER_ENDPOINT, data=payload)
+#     if response.status_code == 201:
+#         del payload['firstName']
+#         login_pass = payload
+#     return login_pass
 
 
 def check_response(response, expected_response):
